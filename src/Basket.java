@@ -1,9 +1,9 @@
 import java.io.*;
 import java.util.Arrays;
 
-public class Basket {
-    private int[] price;
-    private String[] product;
+public class Basket implements Serializable {
+    private final int[] price;
+    private final String[] product;
     private static int[] basket;
 
     public Basket(int[] price, String[] product) {
@@ -50,13 +50,11 @@ public class Basket {
         }
     }
 
-    public static void loadFromTxtFile() {
-        File file = new File("basket.txt");
+    public static Basket loadFromTxtFile(String textFile) {
+        File file = new File(String.valueOf(textFile));
         if (file.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader("basket.txt"))) {
-                String line = br.readLine();
-                String strEnd = line.replaceAll("\\D+", " ");
-                String[] number = strEnd.split(" ");
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String[] number = br.readLine().replaceAll("\\D+", " ").split(" ");
                 basket = new int[number.length - 1];
                 for (int i = 0; i < basket.length; i++) {
                     basket[i] = Integer.parseInt(number[i + 1]);
@@ -65,6 +63,7 @@ public class Basket {
                 e.printStackTrace();
             }
         }
+        return null;
     }
 
     @Override

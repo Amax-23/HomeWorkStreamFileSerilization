@@ -1,17 +1,16 @@
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        String textFile = ("basket.txt");
         Basket basketObjekt = new Basket(new int[]{14, 80, 50, 90, 300}, new String[]{"Хлеб", "Гречневая крупа", "Молоко", "Сливки", "Кофе"});
-        if (Files.exists(Path.of("basket.txt"))) {
-            Basket.loadFromTxtFile();
+        if (Files.exists(Path.of(textFile))) {
+            Basket.loadFromTxtFile(textFile);
             basketObjekt.printCart();
-            System.out.println("Продолжайте:\n");
+            System.out.println("ПРОДОЛЖАЙТЕ:\n");
         }
         while (true) {
             Scanner scanner = new Scanner(System.in);
@@ -20,7 +19,7 @@ public class Main {
             String input = scanner.nextLine();
             if (input.equals("end")) {
                 basketObjekt.printCart();
-                basketObjekt.saveTxt(new File("basket.txt"));
+                basketObjekt.saveTxt(new File(textFile));
                 scanner.close();
                 break;
             }
@@ -31,4 +30,3 @@ public class Main {
         }
     }
 }
-
