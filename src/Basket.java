@@ -39,13 +39,11 @@ public class Basket implements Serializable {
     }
 
     public void saveTxt(File textFile) {
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(textFile));
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(textFile))){
             out.write(Arrays.toString(basket) + "\n");
             out.write(Arrays.toString(product) + "\n");
             out.write(Arrays.toString(price) + "\n");
-            out.close();
-        } catch (IOException e) {
+            } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
