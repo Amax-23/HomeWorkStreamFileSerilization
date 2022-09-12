@@ -18,7 +18,6 @@ public class Basket implements Serializable {
         // C Java 7 появилась конструкция try-with-resources, которую можно использовать так:
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
             out.writeObject(this);
-            out.close();
         }
     }
 
