@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class Basket implements Serializable {
     private final int[] price;
     private final String[] product;
-    private static int[] basket;
+    private int[] basket;
 
     public Basket(int[] price, String[] product) {
         this.price = price;
@@ -12,6 +12,19 @@ public class Basket implements Serializable {
         if (basket == null) {
             basket = new int[product.length];
         }
+    }
+
+    public void saveBin(File file) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+        out.writeObject(this);
+        out.close();
+    }
+
+    public static Basket loadFromBinFile(File file) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+        Basket basketObjekt = (Basket) in.readObject();
+        in.close();
+        return basketObjekt;
     }
 
     public void printList() {
@@ -36,34 +49,6 @@ public class Basket implements Serializable {
             }
         }
         System.out.println("Итого товаров в корзине на сумму: " + sumProduct + " руб.");
-    }
-
-    public void saveTxt(File textFile) {
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(textFile));
-            out.write(Arrays.toString(basket) + "\n");
-            out.write(Arrays.toString(product) + "\n");
-            out.write(Arrays.toString(price) + "\n");
-            out.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static Basket loadFromTxtFile(String textFile) {
-        File file = new File(String.valueOf(textFile));
-        if (file.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                String[] number = br.readLine().replaceAll("\\D+", " ").split(" ");
-                basket = new int[number.length - 1];
-                for (int i = 0; i < basket.length; i++) {
-                    basket[i] = Integer.parseInt(number[i + 1]);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     @Override

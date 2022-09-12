@@ -1,14 +1,14 @@
-import java.io.File;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        String textFile = ("basket.txt");
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        File textBinFile = new File(("basket.bin"));
         Basket basketObjekt = new Basket(new int[]{14, 80, 50, 90, 300}, new String[]{"Хлеб", "Гречневая крупа", "Молоко", "Сливки", "Кофе"});
-        if (Files.exists(Path.of(textFile))) {
-            Basket.loadFromTxtFile(textFile);
+        if (Files.exists(Path.of(String.valueOf(textBinFile)))) {
+            basketObjekt = Basket.loadFromBinFile(textBinFile);
             basketObjekt.printCart();
             System.out.println("ПРОДОЛЖАЙТЕ:\n");
         }
@@ -19,7 +19,7 @@ public class Main {
             String input = scanner.nextLine();
             if (input.equals("end")) {
                 basketObjekt.printCart();
-                basketObjekt.saveTxt(new File(textFile));
+                basketObjekt.saveBin(new File(String.valueOf(textBinFile)));
                 scanner.close();
                 break;
             }
