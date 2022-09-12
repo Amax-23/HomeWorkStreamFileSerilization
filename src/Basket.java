@@ -15,16 +15,20 @@ public class Basket implements Serializable {
     }
 
     public void saveBin(File file) throws IOException {
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-        out.writeObject(this);
-        out.close();
+        // C Java 7 появилась конструкция try-with-resources, которую можно использовать так:
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+            out.writeObject(this);
+            out.close();
+        }
     }
 
     public static Basket loadFromBinFile(File file) throws IOException, ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-        Basket basketObjekt = (Basket) in.readObject();
-        in.close();
-        return basketObjekt;
+        // C Java 7 появилась конструкция try-with-resources, которую можно использовать так:
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            Basket basketObjekt = (Basket) in.readObject();
+            in.close();
+            return basketObjekt;
+        }
     }
 
     public void printList() {
