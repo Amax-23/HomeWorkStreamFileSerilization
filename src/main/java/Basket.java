@@ -1,5 +1,8 @@
+import org.json.simple.JSONObject;
+
 import java.io.*;
 import java.util.Arrays;
+
 
 public class Basket implements Serializable {
     private final int[] price;
@@ -39,13 +42,37 @@ public class Basket implements Serializable {
     }
 
     public void saveTxt(File textFile) {
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(textFile))){
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(textFile))) {
             out.write(Arrays.toString(basket) + "\n");
             out.write(Arrays.toString(product) + "\n");
             out.write(Arrays.toString(price) + "\n");
-            } catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void saveJson(File jsonFile) throws IOException {
+        JSONObject obj = new JSONObject();
+        obj.put("basket", Arrays.toString(basket));
+        try (FileWriter file = new FileWriter(jsonFile)) {
+            file.write(obj.toJSONString());
+        }
+    }
+
+    public static Basket loadFromJsonFile(String jsonFile) throws IOException {
+        File file = new File(String.valueOf(jsonFile));
+        if (file.exists()) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String[] number = br.readLine().replaceAll("\\D+", " ").split(" ");
+                basket = new int[number.length - 1];
+                for (int i = 0; i < basket.length; i++) {
+                    basket[i] = Integer.parseInt(number[i + 1]);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public static Basket loadFromTxtFile(String textFile) {
