@@ -59,24 +59,8 @@ public class Basket implements Serializable {
         }
     }
 
-    public static Basket loadFromJsonFile(String jsonFile) throws IOException {
+    public static Basket loadFromFile(String jsonFile) throws IOException {
         File file = new File(String.valueOf(jsonFile));
-        if (file.exists()) {
-            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                String[] number = br.readLine().replaceAll("\\D+", " ").split(" ");
-                basket = new int[number.length - 1];
-                for (int i = 0; i < basket.length; i++) {
-                    basket[i] = Integer.parseInt(number[i + 1]);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public static Basket loadFromTxtFile(String textFile) {
-        File file = new File(String.valueOf(textFile));
         if (file.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String[] number = br.readLine().replaceAll("\\D+", " ").split(" ");

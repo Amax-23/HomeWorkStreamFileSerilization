@@ -15,9 +15,9 @@ public class ClientLog {
 
     public void exportAsCSV(File txtFile) throws Exception {
         FileWriter writer = null;
-        File logTxt = new File("log.txt");
+        File logTxt = new File(String.valueOf(txtFile));
         Scanner scan = new Scanner(txtFile);
-        File logCsv = new File("log.csv");
+        File logCsv = new File(XMLReader.getLogFile());
         logTxt.createNewFile();
         writer = new FileWriter(logCsv);
         writer.append("productNum,amount\n");

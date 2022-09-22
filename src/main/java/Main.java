@@ -4,16 +4,19 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Main {
+    public static String xmlFile = "shop.xml";
+    public static String logTxt = "log.txt";
+
     public static void main(String[] args) throws Exception {
-        String jsonFile = ("basket.json");
+        XMLReader.readXml(xmlFile);
         ClientLog clientLog = new ClientLog();
         Basket basketObjekt = new Basket(new int[]{14, 80, 50, 90, 300}, new String[]{"Хлеб", "Гречневая крупа", "Молоко", "Сливки", "Кофе"});
-
-        if (Files.exists(Path.of(jsonFile))) {
-            Basket.loadFromJsonFile(jsonFile);
+        if (Files.exists(Path.of(XMLReader.getLoadFileName())) && XMLReader.getIsLoadBoolen() == true) {
+            Basket.loadFromFile(XMLReader.getLoadFileName());
             basketObjekt.printCart();
             System.out.println("ПРОДОЛЖАЙТЕ:\n");
         }
+
         while (true) {
             Scanner scanner = new Scanner(System.in);
             basketObjekt.printList();
@@ -21,8 +24,15 @@ public class Main {
             String input = scanner.nextLine();
             if (input.equals("end")) {
                 basketObjekt.printCart();
-                basketObjekt.saveJson(new File(jsonFile));
-                clientLog.exportAsCSV(new File("log.txt"));
+                if (XMLReader.getIsSaveBoolen() == true && XMLReader.getSaveFormat().equals("json")) {
+                    basketObjekt.saveJson(new File(XMLReader.getSaveFileName()));
+                }
+                if (XMLReader.getIsSaveBoolen() == true && XMLReader.getSaveFormat().equals("txt")) {
+                    basketObjekt.saveTxt(new File(XMLReader.getSaveFileName()));
+                }
+                if (XMLReader.getIsLogBoolen() == true) {
+                    clientLog.exportAsCSV(new File(logTxt));
+                }
                 scanner.close();
                 break;
             }
