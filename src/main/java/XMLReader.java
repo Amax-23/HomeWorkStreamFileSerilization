@@ -4,6 +4,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,7 +24,7 @@ public class XMLReader {
     private static String logFile;
     public static int counter = 0;
 
-    public static void readXml(String xmlFile) throws ParserConfigurationException, IOException, SAXException {
+    public static void readXml(String xmlFile) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(new File(xmlFile));
@@ -29,6 +32,7 @@ public class XMLReader {
         //System.out.println("Корневой элемент: " + root.getNodeName());
         System.out.println("Начало загрузки параметров из файла shop.xml:");
         read(root);
+        //readXml2(xmlFile); // метод считывания по Филиппу Воронову
         System.out.println("Конец загрузки параметров из файла shop.xml:\n");
     }
 
@@ -81,6 +85,47 @@ public class XMLReader {
             read(currentNode);
         }
     }
+    // метод от Филиппа Воронова по чтению из XML файла, гораздо короче (не проверял)
+    public static void readXml2(String xmlFile) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.parse(new File(xmlFile));
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        loadBoolen =  Boolean.parseBoolean(xPath
+                .compile("/config/load/enabled")// указываем путь в XML до нужного значения
+                .evaluate(document));// ответ будет: loadBoolen = "true"
+        System.out.println("Значение loadBoolen = " + loadBoolen);
+        loadFileName = xPath
+                .compile("/config/load/fileName")// указываем путь в XML до нужного значения
+                .evaluate(document);// ответ будет: loadFileName = "basket.json"
+        System.out.println("Значение loadFileName = " + loadFileName);
+        loadFormatFile = xPath
+                .compile("/config/load/format")// указываем путь в XML до нужного значения
+                .evaluate(document);// ответ будет: loadFormatFile = "json"
+        System.out.println("Значение loadFormatFile = " + loadFormatFile);
+        // и так далее берем по пути необходимые значения для наших переменных
+        saveBoolen = Boolean.parseBoolean(xPath
+                .compile("/config/save/enabled")// указываем путь в XML до нужного значения
+                .evaluate(document));// ответ будет: saveBoolen = "true"
+        System.out.println("Значение saveBoolen = " + saveBoolen);
+        saveFileName = xPath
+                .compile("/config/save/fileName")// указываем путь в XML до нужного значения
+                .evaluate(document);// ответ будет: saveFileName = "basket.json"
+        System.out.println("Значение saveFileName = " + saveFileName);
+        saveFormat = xPath
+                .compile("/config/save/format")// указываем путь в XML до нужного значения
+                .evaluate(document);// ответ будет: saveFormat = "json"
+        System.out.println("Значение saveFormat = " + saveFormat);
+        logBoolen = Boolean.parseBoolean(xPath
+                .compile("/config/log/enabled")// указываем путь в XML до нужного значения
+                .evaluate(document));// ответ будет: logBoolen = "true"
+        System.out.println("Значение logBoolen = " + logBoolen);
+        logFile = xPath
+                .compile("/config/log/fileName")// указываем путь в XML до нужного значения
+                .evaluate(document);// ответ будет: logFile = "client.csv"
+        System.out.println("Значение logFile = " + logFile);
+    }
+
 
     public static boolean getIsLoadBoolen() {
         return loadBoolen;

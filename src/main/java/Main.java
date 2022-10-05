@@ -8,7 +8,8 @@ public class Main {
     public static String logTxt = "log.txt";
 
     public static void main(String[] args) throws Exception {
-        XMLReader.readXml(xmlFile);
+        XMLReader.readXml(xmlFile); // чтение XML по созданному мной методу
+        //XMLReader.readXml2(xmlFile); // чтение XML по методу Филиппа Воронова
         ClientLog clientLog = new ClientLog();
         Basket basketObjekt = new Basket(new int[]{14, 80, 50, 90, 300}, new String[]{"Хлеб", "Гречневая крупа", "Молоко", "Сливки", "Кофе"});
         if (Files.exists(Path.of(XMLReader.getLoadFileName())) && XMLReader.getIsLoadBoolen() == true) {
